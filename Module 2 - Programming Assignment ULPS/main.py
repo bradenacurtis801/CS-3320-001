@@ -16,7 +16,7 @@ def findExp(num):
             return [mant, exp]
 
 def ulps(x,y):
-    precision = 20 #sys.float_info.mant_dig
+    precision = sys.float_info.mant_dig
     eps = sys.float_info.epsilon
     inf = math.inf
     base = sys.float_info.radix
@@ -50,7 +50,7 @@ def ulps(x,y):
         return total_ulps
          
 def main():
-    print(ulps(20,30)) #1
+    # print(ulps(20,30)) #1
     print(ulps(-1.0, -1.0000000000000003)) #1
     print(ulps(1.0, 1.0000000000000003)) #1
     print(ulps(1.0, 1.0000000000000004)) #2
