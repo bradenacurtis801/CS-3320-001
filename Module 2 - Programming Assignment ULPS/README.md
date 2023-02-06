@@ -1,0 +1,1 @@
+This program takes in input of 2 floating point numbers of the same sign, and it returns the total number of floating point numbers that can be represented in binary between those 2 floating point number ranges.
