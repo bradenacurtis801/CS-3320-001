@@ -13,6 +13,7 @@ def findExpMant(num):
         return [0,-1022]
     exp = 0
     mant = num
+    if mant == 0: return [0,0]
     while True:
         if mant >= 2:
             mant /=2
@@ -29,7 +30,7 @@ def sign(x):
     """returns -1 if the x is negative, 0 if x is (either positive or negative) zero, 1 if x is positive. 
     """
     x_bin = struct.unpack('Q', struct.pack('d', x))
-    if (bin(x_bin[0])[2] == 1 or bin(x_bin[0])[2] == 0) and (len(bin(x_bin[0])[3:]) == '00000000'):
+    if (bin(x_bin[0])[2] == '1' or bin(x_bin[0])[2] == '0') and ((bin(x_bin[0])[2]) == '0' or (bin(x_bin[0])[3:] == '0'*63)):
         return 0
     elif x < 0:
         return -1
@@ -39,7 +40,10 @@ def sign(x):
 def fraction(x):
     """returns the IEEE fractional part of x as a decimal floating-point number. You must convert 
     binary to decimal. The fraction portion does not include the leading 1 that is not stored. """ 
-    return (findExpMant(x)[0]-1)
+    if findExpMant(x)[0] == 0:
+        return 0
+    else:
+        return (findExpMant(x)[0]-1)
     
 
 def exponent(x):
@@ -51,7 +55,10 @@ def exponent(x):
 def mantissa(x): 
     """returns the full IEEE mantissa of x as a decimal floating-point number (which is the same as 
     fraction() + 1  for normalized numbers; same as fraction() for subnormals). """ 
-    return findExpMant(x)[0]
+    if findExpMant(x)[0] == 0:
+        return 0
+    else:
+        return (findExpMant(x)[0])
 
 def is_posinfinity(x):
     """returns true if x is positive infinity """
@@ -71,7 +78,9 @@ def is_neginfinity(x):
 def ulp(x):
     """returns the magnitude of the spacing between x and its floating-point successor 
     """
-    pass
+    if x >= -2**-1075 and x <= 2**-1075:
+        return 2**-1075
+    else: return 2**(-52 + findExpMant(x)[1])
 def ulps(x, y) :
     """returns the number of intervals between x and y by taking advantage of the IEEE standard"""   
     precision = sys.float_info.mant_dig
@@ -117,8 +126,8 @@ def main():
     print(exponent(y)) ## 2 
     print(exponent(16.6)) ## 4 
     print(fraction(0.0)) ##0.0
-    print(mantissa(6.5)) ##0.0 
-    print(mantissa(0)) ##1.625 
+    print(mantissa(y)) ##1.625 
+    print(mantissa(0)) ##0.0 
     var1 = float('nan') 
     print(exponent(var1)) ## 1024 
     print(exponent(0.0)) ## 0 
@@ -130,7 +139,7 @@ def main():
     print(ulp(y)) ## 8.881784197001252e-16 
     print(ulp(1.0)) ## 2.220446049250313e-16 
     print(ulp(0.0)) ## 5e-324 
-    print(ulp(subMin)) ## 5e-324 
+    print(ulp(subMin)) ## 5e-324
     print(ulp(1.0e15)) ## 0.125 
     print(ulps(1,2)) ## 4503599627370496 
 

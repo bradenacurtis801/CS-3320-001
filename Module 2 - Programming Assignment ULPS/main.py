@@ -51,6 +51,7 @@ def ulps(x,y):
          
 def main():
     # print(ulps(20,30)) #1
+    findExp(0)
     print(ulps(-1.0, -1.0000000000000003)) #1
     print(ulps(1.0, 1.0000000000000003)) #1
     print(ulps(1.0, 1.0000000000000004)) #2
